@@ -1,0 +1,114 @@
+[gd_scene load_steps=13 format=3 uid="uid://6hc387q27sks"]
+
+[ext_resource type="Texture2D" uid="uid://b70gx5ms05eaq" path="res://Sprites/solid_white.svg" id="1_7cyse"]
+[ext_resource type="Script" path="res://Scripts/MainMenu/MainMenu.gd" id="1_u037v"]
+[ext_resource type="Script" path="res://Scripts/MainMenu/LevelChoiseButton.gd" id="2_w05ij"]
+[ext_resource type="Script" path="res://Scripts/MainMenu/MainMenuExitButton.gd" id="3_hpksp"]
+[ext_resource type="PackedScene" uid="uid://i4rrnrfm87un" path="res://Scenes/MainMenu/LevelChoiceTemplate.tscn" id="4_2a27w"]
+[ext_resource type="PackedScene" uid="uid://y3yu1n2117g8" path="res://Scenes/World.tscn" id="5_1xp0i"]
+[ext_resource type="Texture2D" uid="uid://dwv2gv6cgf10f" path="res://Sprites/main_menu_first_scene.png" id="6_0erqm"]
+[ext_resource type="PackedScene" uid="uid://cdl8spcf6btpy" path="res://Scenes/PendulumWorld.tscn" id="7_84n7w"]
+[ext_resource type="PackedScene" uid="uid://b3xd2aa0llifw" path="res://Scenes/FirstCosmicSpeed.tscn" id="8_erabw"]
+[ext_resource type="Texture2D" uid="uid://b1ctyf27ymalw" path="res://Sprites/main_menu_third_scene.png" id="9_vasj8"]
+[ext_resource type="Texture2D" uid="uid://c81vvvf3h2hax" path="res://Sprites/back_arrow.png" id="10_47cyy"]
+[ext_resource type="Script" path="res://Scripts/MainMenu/ReturnToMenuButton.gd" id="11_2nvrr"]
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+script = ExtResource("1_u037v")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+modulate = Color(0.0509804, 0.262745, 0.658824, 1)
+offset_right = 1152.0
+offset_bottom = 648.0
+texture = ExtResource("1_7cyse")
+
+[node name="Menu" type="Node2D" parent="."]
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Menu"]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = 308.0
+offset_top = 192.0
+offset_right = 844.0
+offset_bottom = 448.0
+grow_horizontal = 2
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="LevelChoiseButton" type="Button" parent="Menu/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 50
+text = "ВЫБОР СИМУЛЯЦИИ"
+script = ExtResource("2_w05ij")
+
+[node name="ExitButton" type="Button" parent="Menu/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 50
+text = "ВЫХОД"
+script = ExtResource("3_hpksp")
+
+[node name="SimChoice" type="Node2D" parent="."]
+visible = false
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SimChoice"]
+offset_top = 208.0
+offset_right = 1152.0
+offset_bottom = 476.0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/separation = 100
+alignment = 1
+metadata/_edit_group_ = true
+
+[node name="LevelChoiceHBox" parent="SimChoice/HBoxContainer" instance=ExtResource("4_2a27w")]
+layout_mode = 2
+simulation_scene = ExtResource("5_1xp0i")
+
+[node name="TextureRect" parent="SimChoice/HBoxContainer/LevelChoiceHBox" index="0"]
+texture_normal = ExtResource("6_0erqm")
+
+[node name="Label" parent="SimChoice/HBoxContainer/LevelChoiceHBox" index="1"]
+text = "Падение тела"
+
+[node name="LevelChoiceHBox2" parent="SimChoice/HBoxContainer" instance=ExtResource("4_2a27w")]
+layout_mode = 2
+simulation_scene = ExtResource("7_84n7w")
+
+[node name="LevelChoiceHBox3" parent="SimChoice/HBoxContainer" instance=ExtResource("4_2a27w")]
+layout_mode = 2
+simulation_scene = ExtResource("8_erabw")
+
+[node name="TextureRect" parent="SimChoice/HBoxContainer/LevelChoiceHBox3" index="0"]
+texture_normal = ExtResource("9_vasj8")
+
+[node name="Label" parent="SimChoice/HBoxContainer/LevelChoiceHBox3" index="1"]
+text = "Первая космическая скорость"
+
+[node name="ReturnToMenuButton" type="Button" parent="SimChoice"]
+custom_minimum_size = Vector2(64, 64)
+offset_left = 16.0
+offset_top = 16.0
+offset_right = 80.0
+offset_bottom = 80.0
+script = ExtResource("11_2nvrr")
+metadata/_edit_group_ = true
+
+[node name="TextureRect" type="TextureRect" parent="SimChoice/ReturnToMenuButton"]
+layout_mode = 0
+offset_right = 64.0
+offset_bottom = 64.0
+texture = ExtResource("10_47cyy")
+expand_mode = 1
+
+[connection signal="pressed" from="Menu/VBoxContainer/LevelChoiseButton" to="Menu/VBoxContainer/LevelChoiseButton" method="_on_pressed"]
+[connection signal="pressed" from="Menu/VBoxContainer/ExitButton" to="Menu/VBoxContainer/ExitButton" method="_on_pressed"]
+[connection signal="pressed" from="SimChoice/ReturnToMenuButton" to="SimChoice/ReturnToMenuButton" method="_on_pressed"]
+
+[editable path="SimChoice/HBoxContainer/LevelChoiceHBox"]
+[editable path="SimChoice/HBoxContainer/LevelChoiceHBox2"]
+[editable path="SimChoice/HBoxContainer/LevelChoiceHBox3"]

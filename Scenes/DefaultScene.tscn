@@ -1,0 +1,122 @@
+[gd_scene load_steps=10 format=3 uid="uid://bu5vmivblacbj"]
+
+[ext_resource type="Texture2D" uid="uid://b70gx5ms05eaq" path="res://Sprites/solid_white.svg" id="1_vbxpa"]
+[ext_resource type="Script" path="res://Scripts/RestartButton.gd" id="3_24bwd"]
+[ext_resource type="Texture2D" uid="uid://dy2fq5gc7nf7g" path="res://Sprites/reset_button.png" id="3_fvxmk"]
+[ext_resource type="Script" path="res://Scripts/Platform.gd" id="3_unud4"]
+[ext_resource type="Texture2D" uid="uid://skv363c8is0m" path="res://Sprites/pause_button.png" id="4_1yrln"]
+[ext_resource type="Script" path="res://Scripts/PauseButton.gd" id="4_w7fbf"]
+[ext_resource type="Texture2D" uid="uid://dersfuabwlit5" path="res://Sprites/home_button.png" id="7_6sitt"]
+[ext_resource type="Script" path="res://Scripts/HomeButton.gd" id="8_ogihw"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_crbsa"]
+size = Vector2(1160, 8)
+
+[node name="UI" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 1152.0
+offset_bottom = 648.0
+
+[node name="TextureRect" type="TextureRect" parent="."]
+modulate = Color(0.0509804, 0.262745, 0.658824, 1)
+layout_mode = 0
+offset_right = 1152.0
+offset_bottom = 648.0
+size_flags_horizontal = 4
+texture = ExtResource("1_vbxpa")
+
+[node name="GridContainer" type="HBoxContainer" parent="."]
+process_mode = 3
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -192.0
+offset_top = -80.0
+offset_right = 192.0
+grow_horizontal = 2
+grow_vertical = 0
+size_flags_horizontal = 4
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="RestartButton" type="Button" parent="GridContainer"]
+custom_minimum_size = Vector2(56, 56)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+script = ExtResource("3_24bwd")
+
+[node name="TextureRect" type="TextureRect" parent="GridContainer/RestartButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 5.0
+offset_top = 5.0
+offset_right = -5.0
+offset_bottom = -5.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_fvxmk")
+expand_mode = 1
+
+[node name="PauseButton" type="Button" parent="GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+icon = ExtResource("4_1yrln")
+script = ExtResource("4_w7fbf")
+
+[node name="VariablesFieldHBox" type="VBoxContainer" parent="."]
+process_mode = 3
+clip_contents = true
+layout_mode = 0
+offset_left = 16.0
+offset_top = 16.0
+offset_right = 308.0
+offset_bottom = 155.0
+size_flags_horizontal = 4
+
+[node name="Border" type="StaticBody2D" parent="."]
+position = Vector2(0, 560)
+script = ExtResource("3_unud4")
+metadata/_edit_group_ = true
+
+[node name="Sprite2D" type="Sprite2D" parent="Border"]
+position = Vector2(576, 8)
+scale = Vector2(1152.5, 7.99999)
+texture = ExtResource("1_vbxpa")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Border"]
+position = Vector2(576, 8)
+shape = SubResource("RectangleShape2D_crbsa")
+
+[node name="HomeButton" type="Button" parent="."]
+process_mode = 3
+layout_mode = 2
+offset_left = 1080.0
+offset_top = 580.0
+offset_right = 1136.0
+offset_bottom = 636.0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+script = ExtResource("8_ogihw")
+
+[node name="TextureRect" type="TextureRect" parent="HomeButton"]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("7_6sitt")
+expand_mode = 2
+
+[connection signal="pressed" from="GridContainer/RestartButton" to="GridContainer/RestartButton" method="_on_pressed"]
+[connection signal="pressed" from="GridContainer/PauseButton" to="GridContainer/PauseButton" method="_on_pressed"]
+[connection signal="pressed" from="HomeButton" to="HomeButton" method="_on_pressed"]

@@ -1,0 +1,56 @@
+[gd_scene load_steps=11 format=3 uid="uid://c6xiq7y8w6g44"]
+
+[ext_resource type="Script" path="res://Scripts/SliderPositionChoicer.gd" id="1_yh8k1"]
+[ext_resource type="Texture2D" uid="uid://2ronl2m08t4g" path="res://Sprites/temp_arrow.png" id="2_1dtat"]
+[ext_resource type="Texture2D" uid="uid://1a6ko3d1i4cy" path="res://Sprites/dotted_line.png" id="3_ur4yr"]
+[ext_resource type="Script" path="res://Scripts/DottedLine.gd" id="4_m4em3"]
+[ext_resource type="Script" path="res://Scripts/TimerStopArea.gd" id="5_q62ox"]
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_hkdgy"]
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_fh8xd"]
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_fu08d"]
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_h0a6m"]
+color = Color(1, 1, 1, 1)
+grow_begin = 0.0
+thickness = 2
+vertical = true
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_qhs8m"]
+size = Vector2(400, 2)
+
+[node name="HeightChoice" type="VSlider"]
+offset_left = 456.0
+offset_right = 488.0
+offset_bottom = 552.0
+theme_override_icons/grabber = SubResource("PlaceholderTexture2D_hkdgy")
+theme_override_icons/grabber_highlight = SubResource("PlaceholderTexture2D_fh8xd")
+theme_override_icons/grabber_disabled = SubResource("PlaceholderTexture2D_fu08d")
+theme_override_styles/slider = SubResource("StyleBoxLine_h0a6m")
+script = ExtResource("1_yh8k1")
+
+[node name="Grabber" type="Sprite2D" parent="."]
+position = Vector2(16, 544)
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("2_1dtat")
+
+[node name="DottedLine" type="Line2D" parent="."]
+texture_repeat = 2
+position = Vector2(16, 544)
+points = PackedVector2Array(0, 0, 424, 0)
+width = 2.0
+default_color = Color(1, 1, 1, 0.498039)
+texture = ExtResource("3_ur4yr")
+texture_mode = 1
+script = ExtResource("4_m4em3")
+
+[node name="Area2D" type="Area2D" parent="DottedLine"]
+script = ExtResource("5_q62ox")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DottedLine/Area2D"]
+position = Vector2(224, 0)
+shape = SubResource("RectangleShape2D_qhs8m")
+
+[connection signal="body_entered" from="DottedLine/Area2D" to="DottedLine/Area2D" method="_on_body_entered"]

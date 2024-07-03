@@ -1,0 +1,107 @@
+[gd_scene load_steps=13 format=3 uid="uid://b3xd2aa0llifw"]
+
+[ext_resource type="PackedScene" uid="uid://bu5vmivblacbj" path="res://Scenes/DefaultScene.tscn" id="1_bcja0"]
+[ext_resource type="Texture2D" uid="uid://bwq1atmjjnrhk" path="res://Sprites/white_circle.svg" id="2_6ldld"]
+[ext_resource type="Script" path="res://Scripts/FisrtCosmicSpeed/AcceptButton.gd" id="2_gperm"]
+[ext_resource type="Script" path="res://Scripts/FirstSpaceSpeedBall.gd" id="3_fxshy"]
+[ext_resource type="Script" path="res://Scripts/CosmicBallWingman.gd" id="4_42aak"]
+[ext_resource type="Texture2D" uid="uid://dlyfkv0xi4oeh" path="res://icon.svg" id="4_ihpvx"]
+[ext_resource type="PackedScene" uid="uid://lhw2ddkn02eq" path="res://Scenes/Tech/TrailEffect.tscn" id="6_li5bb"]
+[ext_resource type="PackedScene" uid="uid://bdagk5ftnhy53" path="res://Scenes/Tech/PauseBeforeStart.tscn" id="8_bxep2"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_1t7fu"]
+radius = 72.4431
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_5kyh6"]
+radius = 144.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_tuqej"]
+radius = 16.0
+
+[sub_resource type="Gradient" id="Gradient_i3tk6"]
+offsets = PackedFloat32Array(0.589431, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0.380392)
+
+[node name="FirstCosmicSpeed" type="Node2D"]
+process_mode = 1
+
+[node name="UI" parent="." instance=ExtResource("1_bcja0")]
+
+[node name="SpeedLineEdit" type="LineEdit" parent="UI/VariablesFieldHBox" index="0"]
+layout_mode = 2
+placeholder_text = "Начальная скорость: 7.91 Км/с"
+
+[node name="Button" type="Button" parent="UI/VariablesFieldHBox" index="1" node_paths=PackedStringArray("ball", "speed_textbox")]
+layout_mode = 2
+text = "Применить"
+script = ExtResource("2_gperm")
+ball = NodePath("../../../Ball")
+speed_textbox = NodePath("../SpeedLineEdit")
+
+[node name="Earth" type="StaticBody2D" parent="."]
+position = Vector2(576, 280)
+metadata/_edit_group_ = true
+
+[node name="Sprite2D" type="Sprite2D" parent="Earth"]
+position = Vector2(7.62939e-06, 3.8147e-06)
+scale = Vector2(0.238333, 0.238333)
+texture = ExtResource("2_6ldld")
+
+[node name="Area2D" type="Area2D" parent="Earth"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Earth/Area2D"]
+shape = SubResource("CircleShape2D_1t7fu")
+
+[node name="EarthGravityArea2D" type="Area2D" parent="Earth"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Earth/EarthGravityArea2D"]
+shape = SubResource("CircleShape2D_5kyh6")
+
+[node name="Ball" type="CharacterBody2D" parent="." node_paths=PackedStringArray("status_label")]
+process_mode = 1
+position = Vector2(576, 160)
+script = ExtResource("3_fxshy")
+status_label = NodePath("../StatusLabel")
+
+[node name="Sprite2D" type="Sprite2D" parent="Ball"]
+position = Vector2(-1.52588e-05, -1.54972e-06)
+scale = Vector2(0.0533333, 0.0533333)
+texture = ExtResource("2_6ldld")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Ball"]
+visible = false
+shape = SubResource("CircleShape2D_tuqej")
+
+[node name="Sprite2D2" type="Sprite2D" parent="Ball"]
+visible = false
+position = Vector2(24, -8)
+scale = Vector2(0.125, 0.125)
+texture = ExtResource("4_ihpvx")
+
+[node name="TrailEffect" parent="Ball" instance=ExtResource("6_li5bb")]
+gradient = SubResource("Gradient_i3tk6")
+max_length = 50
+
+[node name="Marker2D" type="Marker2D" parent="."]
+position = Vector2(576, 160)
+script = ExtResource("4_42aak")
+
+[node name="PauseBeforeStart" parent="." instance=ExtResource("8_bxep2")]
+
+[node name="StatusLabel" type="Label" parent="."]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = 448.0
+offset_top = 512.0
+offset_right = 704.0
+offset_bottom = 538.0
+grow_horizontal = 2
+text = "Объект улетел с орбиты"
+horizontal_alignment = 1
+
+[connection signal="pressed" from="UI/VariablesFieldHBox/Button" to="UI/VariablesFieldHBox/Button" method="_on_pressed"]
+[connection signal="body_entered" from="Earth/Area2D" to="Ball" method="_on_area_2d_body_entered"]
+[connection signal="body_exited" from="Earth/EarthGravityArea2D" to="Ball" method="_on_earth_gravity_area_2d_body_exited"]
+
+[editable path="UI"]

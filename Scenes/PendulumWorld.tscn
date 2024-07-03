@@ -1,0 +1,113 @@
+[gd_scene load_steps=12 format=3 uid="uid://cdl8spcf6btpy"]
+
+[ext_resource type="PackedScene" uid="uid://bu5vmivblacbj" path="res://Scenes/DefaultScene.tscn" id="1_gg2i8"]
+[ext_resource type="PackedScene" uid="uid://b12c2s8xn6qv2" path="res://Scenes/Ball.tscn" id="1_r7brl"]
+[ext_resource type="Script" path="res://Scripts/PassCounterLabel.gd" id="2_jabve"]
+[ext_resource type="Script" path="res://Scripts/PassCounterArea2D.gd" id="3_2mj55"]
+[ext_resource type="Script" path="res://Scripts/TimeCounterLabel.gd" id="3_plvos"]
+[ext_resource type="Script" path="res://Scripts/Pendulum/BallSpawnButton.gd" id="4_go13n"]
+[ext_resource type="Texture2D" uid="uid://b70gx5ms05eaq" path="res://Sprites/solid_white.svg" id="5_ydi6e"]
+[ext_resource type="PackedScene" uid="uid://bdagk5ftnhy53" path="res://Scenes/Tech/PauseBeforeStart.tscn" id="7_7c2wk"]
+[ext_resource type="Texture2D" uid="uid://bwq1atmjjnrhk" path="res://Sprites/white_circle.svg" id="10_f4xnq"]
+[ext_resource type="Script" path="res://Scripts/Pendulum/SpawnPointGhost.gd" id="12_3pnpj"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_e3br0"]
+size = Vector2(0, 488)
+
+[node name="Pendulum" type="Node2D"]
+position = Vector2(576, 0)
+
+[node name="UI" parent="." instance=ExtResource("1_gg2i8")]
+offset_left = -576.0
+offset_right = 576.0
+
+[node name="TextureRect" parent="UI" index="0"]
+offset_top = 2.0
+offset_bottom = 650.0
+
+[node name="PassCounterLabel" type="Label" parent="UI/VariablesFieldHBox" index="0"]
+visible = false
+layout_mode = 2
+text = "Счетчик"
+script = ExtResource("2_jabve")
+
+[node name="TimeCounterLabel" type="Label" parent="UI/VariablesFieldHBox" index="1"]
+layout_mode = 2
+text = "Время 
+пересечения центра: "
+script = ExtResource("3_plvos")
+
+[node name="BallSpawnButton" type="Button" parent="UI"]
+process_mode = 3
+visible = false
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = 192.0
+offset_top = 96.0
+offset_right = 321.0
+offset_bottom = 127.0
+grow_horizontal = 2
+text = "Запустить шар"
+script = ExtResource("4_go13n")
+
+[node name="StaticObject" type="StaticBody2D" parent="."]
+
+[node name="Sprite2D" type="Sprite2D" parent="StaticObject"]
+position = Vector2(-4.76837e-06, 9.47333)
+scale = Vector2(54, 19.0533)
+texture = ExtResource("5_ydi6e")
+
+[node name="PassArea2D" type="Area2D" parent="."]
+script = ExtResource("3_2mj55")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PassArea2D"]
+position = Vector2(0, 316)
+shape = SubResource("RectangleShape2D_e3br0")
+
+[node name="SpawnPointGhost" type="Sprite2D" parent="."]
+visible = false
+modulate = Color(1, 1, 1, 0.631373)
+position = Vector2(160, 32)
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("10_f4xnq")
+script = ExtResource("12_3pnpj")
+
+[node name="Button" type="Button" parent="SpawnPointGhost"]
+visible = false
+modulate = Color(1, 1, 1, 0)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -700.0
+offset_top = -700.0
+offset_right = 100.0
+offset_bottom = 100.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PinJointBallStaticObject" type="PinJoint2D" parent="."]
+node_a = NodePath("../Ball")
+node_b = NodePath("../StaticObject")
+
+[node name="Ball" parent="." instance=ExtResource("1_r7brl")]
+position = Vector2(384, 32)
+mass = 0.01
+physics_material_override = null
+metadata/_edit_group_ = true
+
+[node name="TrailEffect" parent="Ball" index="2"]
+max_length = 50
+
+[node name="PauseBeforeStart" parent="." instance=ExtResource("7_7c2wk")]
+
+[connection signal="pressed" from="UI/BallSpawnButton" to="UI/BallSpawnButton" method="_on_pressed"]
+[connection signal="body_entered" from="PassArea2D" to="PassArea2D" method="_on_body_entered"]
+[connection signal="button_down" from="SpawnPointGhost/Button" to="SpawnPointGhost" method="_on_button_button_down"]
+[connection signal="button_up" from="SpawnPointGhost/Button" to="SpawnPointGhost" method="_on_button_button_up"]
+
+[editable path="UI"]
+[editable path="Ball"]

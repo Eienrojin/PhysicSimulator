@@ -1,0 +1,25 @@
+[gd_scene load_steps=5 format=3 uid="uid://cgbih5is7m5pr"]
+
+[ext_resource type="Script" path="res://Scripts/Ruler.gd" id="1_m0hdf"]
+[ext_resource type="Texture2D" uid="uid://b70gx5ms05eaq" path="res://Sprites/solid_white.svg" id="2_sq13j"]
+
+[sub_resource type="SystemFont" id="SystemFont_cps1c"]
+font_names = PackedStringArray("Comic Sans MS")
+subpixel_positioning = 0
+
+[sub_resource type="Theme" id="Theme_j2yrx"]
+default_font = SubResource("SystemFont_cps1c")
+
+[node name="Ruler" type="StaticBody2D"]
+position = Vector2(576, 640)
+script = ExtResource("1_m0hdf")
+start_value = 1
+metric_value = 5
+text_theme = SubResource("Theme_j2yrx")
+count_of_metrics = 3
+metadata/_edit_group_ = true
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(0, -320)
+scale = Vector2(4, 648)
+texture = ExtResource("2_sq13j")

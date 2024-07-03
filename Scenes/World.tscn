@@ -1,0 +1,239 @@
+[gd_scene load_steps=18 format=3 uid="uid://y3yu1n2117g8"]
+
+[ext_resource type="Script" path="res://Scripts/World.gd" id="1_pkylo"]
+[ext_resource type="PackedScene" uid="uid://b12c2s8xn6qv2" path="res://Scenes/Ball.tscn" id="2_4dn2h"]
+[ext_resource type="PackedScene" uid="uid://bu5vmivblacbj" path="res://Scenes/DefaultScene.tscn" id="2_ieu1e"]
+[ext_resource type="Script" path="res://Scripts/CounterLabel.gd" id="3_2anev"]
+[ext_resource type="Script" path="res://Scripts/BallFallingApplyButton/ApplyButton.gd" id="3_tpblp"]
+[ext_resource type="Script" path="res://Scripts/SpeedGraph.gd" id="4_0mdwi"]
+[ext_resource type="Script" path="res://addons/graph_2d/graph_2d.gd" id="5_2g835"]
+[ext_resource type="PackedScene" uid="uid://cgbih5is7m5pr" path="res://Scenes/Ruler.tscn" id="6_fapoi"]
+[ext_resource type="Script" path="res://addons/graph_2d/custom_nodes/legend.gd" id="6_tisi1"]
+[ext_resource type="Script" path="res://addons/graph_2d/custom_nodes/coordinate.gd" id="7_4ct40"]
+[ext_resource type="PackedScene" uid="uid://c6xiq7y8w6g44" path="res://Scenes/HeightChoice.tscn" id="7_gktwj"]
+[ext_resource type="Script" path="res://addons/graph_2d/custom_nodes/plot_2d.gd" id="8_8eal3"]
+[ext_resource type="Script" path="res://addons/graph_2d/custom_nodes/axis.gd" id="9_xka7h"]
+[ext_resource type="Script" path="res://addons/graph_2d/custom_nodes/grid.gd" id="10_2p3ae"]
+[ext_resource type="PackedScene" uid="uid://bdagk5ftnhy53" path="res://Scenes/Tech/PauseBeforeStart.tscn" id="15_iwll5"]
+
+[sub_resource type="SystemFont" id="SystemFont_7kti2"]
+font_names = PackedStringArray("Comic Sans MS")
+subpixel_positioning = 0
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_xroxe"]
+bounce = 0.6
+
+[node name="World" type="Node2D"]
+script = ExtResource("1_pkylo")
+
+[node name="UI" parent="." instance=ExtResource("2_ieu1e")]
+
+[node name="MassTextEdit" type="LineEdit" parent="UI/VariablesFieldHBox" index="0"]
+layout_mode = 2
+placeholder_text = "Масса"
+max_length = 5
+text_direction = 1
+
+[node name="GravitationTextEdit" type="LineEdit" parent="UI/VariablesFieldHBox" index="1"]
+layout_mode = 2
+placeholder_text = "Гравитация"
+max_length = 5
+text_direction = 1
+
+[node name="ApplyButton" type="Button" parent="UI/VariablesFieldHBox" index="2"]
+layout_mode = 2
+text = "Применить"
+script = ExtResource("3_tpblp")
+
+[node name="TimeLabel" type="Label" parent="UI/VariablesFieldHBox" index="3"]
+process_mode = 1
+layout_mode = 2
+theme_override_fonts/font = SubResource("SystemFont_7kti2")
+text = "Время пересечения: 0"
+script = ExtResource("3_2anev")
+
+[node name="SpeedGraph" type="Control" parent="UI" node_paths=PackedStringArray("ligma_ball")]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 704.0
+offset_right = 1152.0
+offset_bottom = 256.0
+script = ExtResource("4_0mdwi")
+ligma_ball = NodePath("../../Ball")
+metadata/_edit_group_ = true
+
+[node name="Graph2D" type="Control" parent="UI/SpeedGraph"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("5_2g835")
+x_label = "Время(t)"
+y_min = -600.0
+y_max = 600.0
+y_label = "Скорость(v)"
+background_color = Color(0.0509804, 0.262745, 0.658824, 1)
+grid_horizontal_visible = true
+grid_vertical_visible = true
+
+[node name="_ColorRect_18005" type="ColorRect" parent="UI/SpeedGraph/Graph2D"]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.0509804, 0.262745, 0.658824, 1)
+
+[node name="_Control_18006" type="Control" parent="UI/SpeedGraph/Graph2D"]
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 45.0
+offset_top = 30.0
+offset_right = -30.0
+offset_bottom = -30.0
+
+[node name="Legend" type="Control" parent="UI/SpeedGraph/Graph2D/_Control_18006"]
+anchors_preset = 0
+script = ExtResource("6_tisi1")
+
+[node name="_VBoxContainer_18010" type="VBoxContainer" parent="UI/SpeedGraph/Graph2D/_Control_18006/Legend"]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 20.0
+offset_right = 10.0
+offset_bottom = 20.0
+
+[node name="Coordinate" type="Label" parent="UI/SpeedGraph/Graph2D/_Control_18006"]
+layout_mode = 0
+anchor_left = 1.0
+anchor_right = 1.0
+offset_right = -20.0
+grow_horizontal = 0
+text = "(0.0, 0.0)"
+script = ExtResource("7_4ct40")
+
+[node name="Axis2" type="Control" parent="UI/SpeedGraph/Graph2D"]
+anchors_preset = 0
+script = ExtResource("9_xka7h")
+
+[node name="XLabel" type="Label" parent="UI/SpeedGraph/Graph2D/Axis2"]
+layout_mode = 0
+
+[node name="YLabel" type="Label" parent="UI/SpeedGraph/Graph2D/Axis2"]
+layout_mode = 0
+rotation = -1.5708
+
+[node name="Grid2" type="Control" parent="UI/SpeedGraph/Graph2D"]
+anchors_preset = 0
+script = ExtResource("10_2p3ae")
+
+[node name="Background" type="ColorRect" parent="UI/SpeedGraph/Graph2D"]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.0509804, 0.262745, 0.658824, 1)
+
+[node name="PlotArea" type="Control" parent="UI/SpeedGraph/Graph2D"]
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 65.0
+offset_top = 30.0
+offset_right = -30.0
+offset_bottom = -50.0
+
+[node name="Legend" type="Control" parent="UI/SpeedGraph/Graph2D/PlotArea"]
+anchors_preset = 0
+script = ExtResource("6_tisi1")
+
+[node name="28783" type="VBoxContainer" parent="UI/SpeedGraph/Graph2D/PlotArea/Legend"]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 20.0
+offset_right = 10.0
+offset_bottom = 20.0
+
+[node name="28785" type="Label" parent="UI/SpeedGraph/Graph2D/PlotArea/Legend/28783"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 1, 0, 1)
+
+[node name="_VBoxContainer_18002" type="VBoxContainer" parent="UI/SpeedGraph/Graph2D/PlotArea/Legend"]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 20.0
+offset_right = 10.0
+offset_bottom = 20.0
+
+[node name="Coordinate" type="Label" parent="UI/SpeedGraph/Graph2D/PlotArea"]
+layout_mode = 0
+anchor_left = 1.0
+anchor_right = 1.0
+offset_right = -20.0
+grow_horizontal = 0
+text = "(0.0, 0.0)"
+script = ExtResource("7_4ct40")
+
+[node name="My Plot" type="Control" parent="UI/SpeedGraph/Graph2D/PlotArea"]
+anchors_preset = 0
+script = ExtResource("8_8eal3")
+
+[node name="Axis" type="Control" parent="UI/SpeedGraph/Graph2D"]
+anchors_preset = 0
+script = ExtResource("9_xka7h")
+
+[node name="XLabel" type="Label" parent="UI/SpeedGraph/Graph2D/Axis"]
+layout_mode = 0
+offset_left = 241.5
+offset_top = 226.0
+offset_right = 310.5
+offset_bottom = 252.0
+text = "Время(t)"
+
+[node name="YLabel" type="Label" parent="UI/SpeedGraph/Graph2D/Axis"]
+layout_mode = 0
+offset_left = 5.0
+offset_top = 118.0
+offset_right = 99.0
+offset_bottom = 144.0
+rotation = -1.5708
+text = "Скорость(v)"
+
+[node name="_Label_18003" type="Label" parent="UI/SpeedGraph/Graph2D/Axis"]
+layout_mode = 0
+
+[node name="_Label_18004" type="Label" parent="UI/SpeedGraph/Graph2D/Axis"]
+layout_mode = 0
+rotation = -1.5708
+
+[node name="Grid" type="Control" parent="UI/SpeedGraph/Graph2D"]
+anchors_preset = 0
+script = ExtResource("10_2p3ae")
+
+[node name="Ball" parent="." instance=ExtResource("2_4dn2h")]
+position = Vector2(512, 64)
+physics_material_override = SubResource("PhysicsMaterial_xroxe")
+
+[node name="FullRuler" type="Node2D" parent="."]
+process_mode = 3
+position = Vector2(307, -103)
+metadata/_edit_group_ = true
+
+[node name="Ruler" parent="FullRuler" instance=ExtResource("6_fapoi")]
+visible = false
+position = Vector2(16, 552)
+count_of_metrics = 10
+
+[node name="HeightChoice" parent="FullRuler" node_paths=PackedStringArray("timer_label") instance=ExtResource("7_gktwj")]
+offset_left = 1.0
+offset_top = 106.0
+offset_right = 33.0
+offset_bottom = 650.0
+timer_label = NodePath("../../UI/VariablesFieldHBox/TimeLabel")
+
+[node name="PauseBeforeStart" parent="." instance=ExtResource("15_iwll5")]
+
+[connection signal="pressed" from="UI/VariablesFieldHBox/ApplyButton" to="UI/VariablesFieldHBox/ApplyButton" method="_on_pressed"]
+
+[editable path="UI"]
+[editable path="FullRuler/HeightChoice"]

@@ -1,0 +1,29 @@
+[gd_scene load_steps=7 format=3 uid="uid://b12c2s8xn6qv2"]
+
+[ext_resource type="Script" path="res://Scripts/Ball.gd" id="1_35r5t"]
+[ext_resource type="Texture2D" uid="uid://bwq1atmjjnrhk" path="res://Sprites/white_circle.svg" id="1_hkmfk"]
+[ext_resource type="PackedScene" uid="uid://lhw2ddkn02eq" path="res://Scenes/Tech/TrailEffect.tscn" id="3_kj7uy"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_2v8ng"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_x6txl"]
+radius = 30.0167
+
+[sub_resource type="Gradient" id="Gradient_c43gm"]
+offsets = PackedFloat32Array(0.662393, 0.982906, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0.307692, 1, 1, 1, 0)
+
+[node name="Ball" type="RigidBody2D"]
+physics_material_override = SubResource("PhysicsMaterial_2v8ng")
+script = ExtResource("1_35r5t")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("1_hkmfk")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_x6txl")
+
+[node name="TrailEffect" parent="." instance=ExtResource("3_kj7uy")]
+gradient = SubResource("Gradient_c43gm")
+max_length = 20
